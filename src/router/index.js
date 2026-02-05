@@ -5,7 +5,11 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {
+      requerieAutorizacion: true,
+      esPublica: false
+    }
   },
   {
     path: '/consultar-todos',
@@ -20,7 +24,11 @@ const routes = [
   {
     path: '/guardar',
     name: 'guardar',
-    component: () => import('@/views/GuardarView.vue')
+    component: () => import('@/views/GuardarView.vue'),
+    meta: {
+      requerieAutorizacion: true,
+      esPublica: false
+    }
   },
   {
     path: '/actualizar',
@@ -35,13 +43,28 @@ const routes = [
   {
     path: '/borrar',
     name: 'borrar',
-    component: () => import('@/views/BorrarView.vue')
+    component: () => import('@/views/BorrarView.vue'),
+    meta: {
+      requerieAutorizacion: true,
+      esPublica: false
+    }
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+/*Configuracion del guardian*/
+router.beforeEach((to, from, next) => {
+  if(to.meta.requerieAutorizacion && !to.meta.esPublica){
+    //le envio a una pagina de login}
+    console.log("Redirige a login");
+  }else {
+    console.log("Pase libre");
+    next();
+}
 })
 
 export default router
