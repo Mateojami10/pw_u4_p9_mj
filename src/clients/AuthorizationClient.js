@@ -1,76 +1,33 @@
 import axios from 'axios';
 
-const API_BASE_URL = '/auth';
+const URL = '/auth/token?user=admin&password=admin123';
 
-// Credenciales
-const CREDENTIALS = {
-    user: 'admin',
-    password: 'admin123'
-};
+let tokenGuardado = null;
+let expiracion = null;
 
-class AuthorizationClient {
-    constructor() {
-        this.token = null;
-        this.tokenExpiration = null;
-        this.role = null;
-    }
-
-    async getToken() {
-        try {
-            // Si ya tenemos un token válido, lo retornamos
-            if (this.token && this.isTokenValid()) {
-                return this.token;
-            }
-
-            // Solicitar un nuevo token
-            const response = await axios.get(`${API_BASE_URL}/token`, {
-                params: {
-                    user: CREDENTIALS.user,
-                    password: CREDENTIALS.password
-                }
-            });
-
-            // Guardar el token y su información
-            this.token = response.data.accessToken;
-            this.tokenExpiration = response.data.expiresAt;
-            this.role = response.data.role;
-
+const obtenerToken = async () => {
+    const respuesta = await axios.get(URL).then((response) => {
+        if (response.data) {
             console.log('Token obtenido exitosamente');
-            return this.token;
-        } catch (error) {
-            console.error('Error al obtener el token:', error.response?.data || error.message);
-            throw new Error('No se pudo obtener el token de autorización');
+            return response.data;
+        } else {
+            console.error('No se pudo obtener el token');
+            return null;
         }
-    }
-
-    isTokenValid() {
-        if (!this.token || !this.tokenExpiration) {
-            return false;
-        }
-
-        //Verificar si el token aún no ha expirado
-        const now = Math.floor(Date.now() / 1000);
-        return this.tokenExpiration > (now + 60);
-    }
-
-    getRole() {
-        return this.role;
-    }
-
-    clearToken() {
-        this.token = null;
-        this.tokenExpiration = null;
-        this.role = null;
-    }
-
-    async getAuthHeaders() {
-        const token = await this.getToken();
-        return {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        };
-    }
+    });
+    return respuesta;
 }
 
-//Exportar una instancia unica
-export default new AuthorizationClient();
+export async function obtenerTokenFacade() {
+    const ahora = Date.now() / 1000;
+    
+    if (tokenGuardado && expiracion && expiracion > ahora) {
+        console.log('Reutilizando token');
+        return { accessToken: tokenGuardado, expiresAt: expiracion };
+    } else {
+        const datos = await obtenerToken();
+        tokenGuardado = datos.accessToken;
+        expiracion = datos.expiresAt;
+        return datos;
+    }
+}
