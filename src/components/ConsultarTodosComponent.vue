@@ -1,7 +1,7 @@
 <template>
     <div class="consultar-todos">
         <h2>Consultar Todos los Estudiantes</h2>
-        <button @click="consultarTodos" class="consultar-todos">Consultar</button>
+        <button @click="consultarTodos" class="btn-consultar">Consultar</button>
         
         <div v-if="estudiantes.length > 0" class="tabla-container">
             <table>

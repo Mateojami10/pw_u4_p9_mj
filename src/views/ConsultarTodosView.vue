@@ -20,7 +20,7 @@ export default {
     padding: 20px;
 }
 
-.btn-primary {
+.btn-consultar {
     background: #42b983;
     color: white;
     padding: 10px 20px;
@@ -30,7 +30,7 @@ export default {
     margin-bottom: 20px;
 }
 
-.btn-primary:hover {
+.btn-consultar:hover {
     background: #35a372;
 }
 

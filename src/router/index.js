@@ -12,10 +12,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView,
-    meta: {
-      requerieAutorizacion: true,
-      esPublica: false
-    }
+   
   },
   
   {
@@ -70,7 +67,7 @@ router.beforeEach((to, from, next) => {
   if(to.meta.requerieAutorizacion){
     if(!estaAutenticado){
       console.log("Redirige a login");
-      next({name: 'login'});
+      next({name: 'home'});
     } else {
       console.log("Pase libre");
       next();

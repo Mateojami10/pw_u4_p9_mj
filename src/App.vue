@@ -1,7 +1,7 @@
 <template>
   <nav>
-    <router-link to="/login">Login</router-link> |
     <router-link to="/">Home</router-link> |
+    <router-link to="/login">Login</router-link> |
     <router-link to="/consultar-todos">Consultar Todos</router-link> |
     <router-link to="/consultar-por-id">Consultar por ID</router-link> |
     <router-link to="/guardar">Guardar</router-link> |
