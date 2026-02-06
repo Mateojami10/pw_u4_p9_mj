@@ -1,7 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import LoginView from '../views/LoginView.vue'
 
 const routes = [
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView,
+  },
   {
     path: '/',
     name: 'home',
@@ -11,6 +17,7 @@ const routes = [
       esPublica: false
     }
   },
+  
   {
     path: '/consultar-todos',
     name: 'consultarTodos',
@@ -58,13 +65,25 @@ const router = createRouter({
 
 /*Configuracion del guardian*/
 router.beforeEach((to, from, next) => {
-  if(to.meta.requerieAutorizacion && !to.meta.esPublica){
-    //le envio a una pagina de login}
-    console.log("Redirige a login");
-  }else {
-    console.log("Pase libre");
-    next();
-}
+  const estaAutenticado = localStorage.getItem("estaAutenticado");
+  
+  if(to.meta.requerieAutorizacion){
+    if(!estaAutenticado){
+      console.log("Redirige a login");
+      next({name: 'login'});
+    } else {
+      console.log("Pase libre");
+      next();
+    }
+  } else {
+    // Si está autenticado y va a login, redirigir a home
+    if(to.name === 'login' && estaAutenticado){
+      next({name: 'home'});
+    } else {
+      next();
+    }
+  }
 })
+
 
 export default router
