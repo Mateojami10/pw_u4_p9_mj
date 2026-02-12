@@ -39,13 +39,13 @@ export default {
                 return;
             }
             
-            if (!confirm(`Está seguro que desea borrar el estudiante con ID ${this.id}?`)) {
+            if (!confirm("Está seguro que desea borrar el estudiante?")) {
                 return;
             }
             
             try {
                 await borrarFachada(this.id);
-                this.mensaje = `Estudiante con ID ${this.id} borrado exitosamente`;
+                this.mensaje = "Estudiante borrado exitosamente";
                 this.esError = false;
                 this.id = '';
             } catch (error) {

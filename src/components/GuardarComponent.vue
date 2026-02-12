@@ -63,7 +63,7 @@ export default {
         async guardarEstudiante() {
             try {
                 const resultado = await guardarFachada(this.estudiante);
-                this.mensaje = `Estudiante guardado exitosamente con ID: ${resultado.id || 'N/A'}`;
+                this.mensaje = "Estudiante guardado exitosamente";
                 this.esError = false;
                 this.limpiarFormulario();
             } catch (error) {
